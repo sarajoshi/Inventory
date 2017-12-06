@@ -1,0 +1,71 @@
+
+
+@SuppressWarnings("rawtypes")
+public class LinkedDataArray<T> implements StackInterface {
+
+	private T[] arr;
+    private int total;
+    private int size;
+	@SuppressWarnings("unchecked")
+	public LinkedDataArray() {
+		arr = (T[]) new Object[size];
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void push(Object newEntry) {
+		  if (arr.length == total) {
+			int capacity = 0;
+			T[] tmp = (T[]) new Object[capacity];
+		        System.arraycopy(arr, 0, tmp, 0, total);
+		        arr = tmp;
+	        arr[total++] = (T) newEntry;
+		  }
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Object pop() {
+		 if (total == 0) throw new java.util.NoSuchElementException();
+	        T newEntry = arr[--total];
+	        arr[total] = null;
+	        if (total > 0 && total == arr.length / 4) {
+	        	int capacity=0;
+				T[] tmp = (T[]) new Object[capacity];
+		        System.arraycopy(arr, 0, tmp, 0, total);
+		        arr = tmp;
+	        return newEntry;
+	        }
+			return newEntry;
+	}
+
+	@Override
+	public Object peek() {
+		 Object obj=null;
+	        if(size > 0)
+	            obj=size-1;
+	        else
+	            System.out.println("Queue is empty");
+
+	        return obj;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		if (size == -1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public void clear() {
+		if (size == -1) {
+			throw new Error("Empty stack") ;
+		} else {
+			for(int i=size; i>0; ++i)
+			size--;
+		}
+	}
+}

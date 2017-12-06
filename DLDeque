@@ -1,0 +1,131 @@
+package cpp;
+/**
+ * A class implementing an ADT QUEUE using a doubly linked node.
+ * @author Sara Joshi
+ * @version 1.0
+ * @param <T>
+ *
+ */
+public class DLDeque<T> extends DLNode<T> implements DequeInterface<T> {
+	@SuppressWarnings("rawtypes")
+	private DLNode head;     //pointer to beginning of line
+	@SuppressWarnings("rawtypes")
+	private DLNode tail;     //pointer to end of line
+	private int size;
+	private Object[] array;
+
+	public DLDeque() {
+		head=null;
+		tail=null;
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void addToFront(T newEntry) {
+		DLNode newFirst = new DLNode();
+        newFirst.newEntry = newEntry;
+
+        if (head != null) {
+            newFirst.next = (T) head;
+            head.previous = newFirst;
+        }
+        head = newFirst;
+        if (tail == null) tail = head;
+
+        size++;
+		//create a new node
+		//set it to the front of the line
+		//fix all pointers
+
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void addToBack(T newEntry) {
+		DLNode newLast = new DLNode();
+        newLast.newEntry = newEntry;
+
+        if (tail != null) {
+            newLast.previous = tail;
+            tail.next = (T) newLast;
+        }
+        tail = newLast;
+        if (head == null) head = tail;
+
+        size++;
+		//create a new node
+		//set it to the back of the line
+		//fix all pointers
+
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public T removeFront() {
+		DLNode oldFirst = head;
+        head = (DLNode) head.next;
+        if (head == null) {
+            throw new Error ("There is no data there!");
+        } else if (head == null) {
+            tail = null;
+        } else {
+            head.previous = null;
+        size--;
+        }
+
+        return (T) oldFirst.newEntry;
+		//check if data is there
+		//if NOT throw exception
+		//hold data in temp variable
+		//delete data in DLNode (for security)
+		//move head to next
+		//ONLY IF there is a DLNode that head is pointing to move its prev to null
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public T removeBack() {
+		  DLNode oldLast = tail;
+	      tail = (DLNode) oldLast.previous;
+	      if (head == null) {
+	            throw new Error ("There is no data there!");
+	      } else if (tail == null) {
+	            head = null;
+	      } else {
+	            tail.next = null;
+	        size--;
+	      }
+	        return (T) oldLast.newEntry;
+		//check if there is data there
+		//if NOT throw exception
+		//hold data in temp variable
+		//delete data in DLNode (for security)
+		//move TAIL to prev
+		//ONLY IF there is a DLNode that TAIL is pointing to move next to null
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public T getFront() {
+		return (T) head;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public T getBack() {
+		return (T) tail;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return head==null;
+	}
+
+	@Override
+	public void clear() {
+		for (int i=0; i>size; i++) {
+			array[i]= null;
+		}
+
+	}
+}
