@@ -1,71 +1,103 @@
+/**
+ * Singly linked list
+ */
+public class List<T> implements ListInterface<T> {
+  private SNode front = null;
+  private SNode back = null;
 
+  public void add(T newEntry) {
+    SNode newNode = new SNode(newEntry);
+    if (isEmpty()) {
+      front = newNode;
+      back = newNode;
+    } else {
+      back.setLink(newNode);
+    }
+  }
 
-@SuppressWarnings("rawtypes")
-public class LinkedDataArray<T> implements StackInterface {
+  public void add(int position, T newEntry) {
+    SNode newNode = new SNode(newEntry);
+    if (position == 0) {
+      newNode.setLink(front);
+      front = newNode;
+    } else {
+      SNode before = getNodeAt(position);
+      SNode after = before.getLink();
+      before.setLink(newNode);
+      newNode.setLink(after);
+      if (after == null) {
+        back = newNode;
+      }
+    }
+  }
 
-	private T[] arr;
-    private int total;
-    private int size;
-	@SuppressWarnings("unchecked")
-	public LinkedDataArray() {
-		arr = (T[]) new Object[size];
-	}
+  public T remove(int position) {
+    if (position == 0) {
+      T data = (T)front.getData();
+      front = front.getLink();
+      return data;
+    } else {
+      SNode before = getNodeAt(position - 1);
+      SNode toRemove = before.getLink();
+      SNode after = toRemove.getLink();
+      before.setLink(after);
+      return (T)toRemove.getData();
+    }
+  }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public void push(Object newEntry) {
-		  if (arr.length == total) {
-			int capacity = 0;
-			T[] tmp = (T[]) new Object[capacity];
-		        System.arraycopy(arr, 0, tmp, 0, total);
-		        arr = tmp;
-	        arr[total++] = (T) newEntry;
-		  }
-	}
+  public T replace(int position, T newEntry) {
+    SNode node = getNodeAt(position);
+    T data = (T)node.getData();
+    node.setData(newEntry);
+    return data;
+  }
+  public T getEntry(int position) {
+    return (T)getNodeAt(position).getData();
+  }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public Object pop() {
-		 if (total == 0) throw new java.util.NoSuchElementException();
-	        T newEntry = arr[--total];
-	        arr[total] = null;
-	        if (total > 0 && total == arr.length / 4) {
-	        	int capacity=0;
-				T[] tmp = (T[]) new Object[capacity];
-		        System.arraycopy(arr, 0, tmp, 0, total);
-		        arr = tmp;
-	        return newEntry;
-	        }
-			return newEntry;
-	}
+  public SNode getNodeAt(int position) {
+    SNode current = front;
+    for (int count = 1; count < position; count++) {
+      current = current.getLink();
+    }
+    return current;
+  }
 
-	@Override
-	public Object peek() {
-		 Object obj=null;
-	        if(size > 0)
-	            obj=size-1;
-	        else
-	            System.out.println("Queue is empty");
+  public void clear() {
+    front = null;
+    back = null;
+  }
 
-	        return obj;
-	}
-
-	@Override
-	public boolean isEmpty() {
-		if (size == -1) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	@Override
-	public void clear() {
-		if (size == -1) {
-			throw new Error("Empty stack") ;
-		} else {
-			for(int i=size; i>0; ++i)
-			size--;
-		}
-	}
+  public boolean contains(T anEntry) {
+    SNode current = front;
+    while (current != null) {
+      if ((T)current.getData() == anEntry)
+        return true;
+      current = current.getLink();
+    }
+    return false;
+  }
+  public int getLength() {
+    int length = 0;
+    SNode current = front;
+    while (current != null) {
+      length++;
+      current = current.getLink();
+    }
+    return length;
+  }
+  public T[] toArray() {
+    T[] arr = (T[])new Object[getLength()];
+    int pos = 0;
+    SNode current = front;
+    while (pos < getLength()) {
+      arr[pos] = (T)current.getData();
+      current = current.getLink();
+      pos++;
+    }
+    return arr;
+  }
+  public boolean isEmpty() {
+    return front == null;
+  }
 }
